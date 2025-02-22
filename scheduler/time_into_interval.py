@@ -10,8 +10,7 @@ from micropython import const
 
 
 class TimeIntoIntervalTypes:
-    """TimeIntoIntervalTypes enum
-    """
+    """TimeIntoIntervalTypes enum"""
     TIME_INTO_INTERVAL_SEC = const(0)
     """Time into interval precision type is seconds."""
     TIME_INTO_INTERVAL_MIN = const(1)
