@@ -32,22 +32,23 @@ class Cron:
         except TypeError:
             raise ValueError('Invalid argument type', type(a))
             
-            
+      
     # A call to the inner function takes 270-520μs on Pyboard depending on args
     def get_job_event_time(self, *, secs=0, mins=0, hrs=3, mday=None, month=None, wday=None) -> int:
         """Get job event time
-        Returns the amount of time the job has to wait in seconds since epoch.
         
         cron1 = cron.get_job_event_time(hrs=None, mins=range(0, 60, 15))  # Every 15 minutes of every day
-        
-        Valid numbers are shown as inclusive ranges.
-            secs=0 Seconds (0..59).
-            mins=0 Minutes (0..59).
-            hrs=3 Hours (0..23).
-            mday=None Day of month (1..31).
-            month=None Months (1..12).
-            wday=None Weekday (0..6 Mon..Sun).
-        
+
+        Args:
+            secs (int, optional): Seconds (0..59). Defaults to 0.
+            mins (int, optional): Minutes (0..59). Defaults to 0.
+            hrs (int, optional): Hours (0..23). Defaults to 3.
+            mday (int, optional): Day of month (1..31). Defaults to None.
+            month (int, optional): Months (1..12). Defaults to None.
+            wday (int, optional): Weekday (0..6 Mon..Sun). Defaults to None.
+
+        Returns:
+            int: The amount of time the job has to wait in seconds since epoch.
         """
         self._secs = secs
         self._mins = mins
