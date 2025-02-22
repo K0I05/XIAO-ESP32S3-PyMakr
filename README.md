@@ -18,7 +18,6 @@ async def main() -> None:
     await disconnect_wifi()
 
     # Create scheduled tasks
-    asyncio.create_task(do_work_task("tsk0"))
     asyncio.create_task(scheduler.create_schedule(poll_i2c0_devices_task, "tsk1", hrs=None, mins=range(0, 60, 1)))  # poll i2c device(s) every minute
     
     while True:

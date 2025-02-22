@@ -22,7 +22,7 @@ class TimeIntoInterval:
     MAXT_MSEC = const(100)
     
     def __init__(self, interval_type: TimeIntoIntervalTypes, interval_period: int, interval_offset: int) -> None:
-        """Initializes time-into-interval class.
+        """Initializes TimeIntoInterval Class
         
         A time-into-interval is used within a MicroPython task subroutine for conditional or task delay 
         based on the configured interval type, period, and offset that is synchronized to the system clock.
@@ -52,10 +52,10 @@ class TimeIntoInterval:
             t -= TimeIntoInterval.MAXT_MSEC
         
     
-    def _normalize_interval_to_msec(self, interval_type: TimeIntoIntervalTypes, interval_period: int) -> int:
-        """Normalize interval to milli-seconds
+    def normalize_interval_to_msec(self, interval_type: TimeIntoIntervalTypes, interval_period: int) -> int:
+        """Normalize Interval
         
-        Gets normalized interval in milli-seconds from interval type and period.
+        Calculates normalized interval in milli-seconds from interval type and period.
 
         Args:
             interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
@@ -75,15 +75,17 @@ class TimeIntoInterval:
     
     
     def epoch_time_next_event_msec(self, interval_type: TimeIntoIntervalTypes, interval_period: int, interval_offset: int, epoch_time_last_event_msec: int = 0) -> int:
-        """Epoch time next event milli-seconds.
+        """Epoch Time Next Event
         
-        Gets epoch time of the next event in milli-seconds from system clock based on the time interval type, period, and offset.
+        Calculates epoch time of the next event in milli-seconds from system clock based on the time interval type, period, and offset, and epoch 
+        time of the last event in milli-seconds.
         
         The interval should be divisible by 60 i.e. no remainder if the interval type and period is every 10-seconds with no offset, the event 
         will trigger on-time with the system clock i.e. 09:00:00, 09:00:10, 09:00:20, etc.
         
         The interval offset is used to offset the start of the interval period.  If the interval type and period is every 5-minutes 
         with a 1-minute offset, the event will trigger on-time with the system clock i.e. 09:01:00, 09:06:00, 09:11:00, etc.
+
 
         Args:
             interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
@@ -100,8 +102,8 @@ class TimeIntoInterval:
             raise ValueError("Interval period cannot be 0, time-into-interval epoch time event failed")
         
         # Normalize interval period and offset to milli-seconds
-        interval_period_msec = self._normalize_interval_to_msec(interval_type, interval_period)
-        interval_offset_msec = self._normalize_interval_to_msec(interval_type, interval_offset)
+        interval_period_msec = self.normalize_interval_to_msec(interval_type, interval_period)
+        interval_offset_msec = self.normalize_interval_to_msec(interval_type, interval_offset)
         
         # Validate interval period argument on total days
         if interval_period_msec >= (28 * 24 * 60 * 60 * 1000):
@@ -124,7 +126,7 @@ class TimeIntoInterval:
         next_dow   = 0
         next_doy   = 0
         
-        # Initialize next tm structure time-parts localtime based on interval-type
+        # Initialize next time-parts localtime based on interval-type
         if interval_type == TimeIntoIntervalTypes.TIME_INTO_INTERVAL_SEC:
             next_year  = now_year
             next_month = now_month
@@ -147,7 +149,7 @@ class TimeIntoInterval:
             next_m    = 0
             next_s    = 0
         
-        # Handle interval period by tm structure time-part timespan exceedance
+        # Handle interval period by time-parts timespan exceedance
         if interval_period_msec > 60 * 1000:
             # Over 60-seconds, set minute time-part to 0
             next_m = 0
@@ -173,7 +175,7 @@ class TimeIntoInterval:
             epoch_time_next_event_msec = epoch_time_last_event_msec + interval_period_msec
         else:
             # Get system unix epoch times (seconds and milli-seconds)
-            now_epoch_time_msec = self.epoch_time_msec()
+            now_epoch_time_msec = self.epoch_time_msec
             
             # Convert next time parts to unix epoch time in milli-seconds
             epoch_time_next_event_msec = int(round(time.mktime((next_year, next_month, next_day, next_h, next_m, next_s, next_dow, next_doy)) * 1000))
@@ -197,22 +199,11 @@ class TimeIntoInterval:
         # Return next task event epoch time
         return epoch_time_next_event_msec
     
-
-    def epoch_time_msec(self) -> int:
-        """Epoch time milli-seconds
-        
-        Gets epoch time in milli-seconds from the system clock.
-
-        Returns:
-            int: Epoch time in milli-seconds.
-        """
-        return int(round(time.time() * 1000))
-    
     
     def epoch_time_last_event_msec(self, interval_type: TimeIntoIntervalTypes, interval_period: int, next_epoch_time_msec: int) -> int:
-        """Epoch time last event milli-seconds
+        """Epoch Time Last Event
         
-        Gets epoch time of the last event in milli-seconds.
+        Calculates epoch time of the last event in milli-seconds from interval type and period, and the next epoch time in milli-seconds.
 
         Args:
             interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
@@ -223,14 +214,14 @@ class TimeIntoInterval:
             int: Epoch time of the last event in milli-seconds.
         """
         # Convert interval into msec
-        interval_msec = self._normalize_interval_to_msec(interval_type, interval_period)
+        interval_msec = self.normalize_interval_to_msec(interval_type, interval_period)
         
         # Set last event epoch timestamp
         return next_epoch_time_msec - interval_msec
     
     
     def interval_elapsed(self) -> bool:
-        """Interval Elapsed.
+        """Interval Elapsed
         
         Validates interval-elapsed condition based on the configured interval type, period, 
         and offset arguments that is synchronized to the system clock and returns true when 
@@ -242,7 +233,7 @@ class TimeIntoInterval:
         state = False
         
         # Get system unix epoch timestamp (UTC) in milliseconds
-        now_epoch_time_msec = self.epoch_time_msec()
+        now_epoch_time_msec = self.epoch_time_msec
         
         # Compute time delta until next time into interval condition
         delta_msec = self._next_epoch_time_msec - now_epoch_time_msec
@@ -257,15 +248,16 @@ class TimeIntoInterval:
         
         return state
     
+    
     async def interval_sleep(self) -> None:
-        """Interval Sleep.
+        """Interval Sleep
         
         The task goes to sleep until the next scheduled task event.  This function should be 
         placed after the `while True:` syntax to delay the task based on the configured interval 
         type, period, and offset arguments that is synchronized to the system clock.
         """
         # Get system unix epoch times (milli-seconds)
-        now_epoch_time_msec = self.epoch_time_msec()
+        now_epoch_time_msec = self.epoch_time_msec
         
         # Compute time delta until next scan event
         delta_msec = self._next_epoch_time_msec - now_epoch_time_msec
@@ -283,3 +275,63 @@ class TimeIntoInterval:
         
         # Set epoch timestamp of the next scheduled task
         self._next_epoch_time_msec = self.epoch_time_next_event_msec(self._interval_type, self._interval_period, self._interval_offset, self._next_epoch_time_msec)
+        
+        
+    @property
+    def epoch_time_msec(self) -> int:
+        """Epoch Time
+        
+        Gets epoch time in milli-seconds from the system clock.
+
+        Returns:
+            int: Epoch time in milli-seconds.
+        """
+        return int(round(time.time() * 1000))
+    
+    
+    @property
+    def interval_type(self) -> TimeIntoIntervalTypes:
+        """Interval Type
+        
+        Gets interval type.
+
+        Returns:
+            TimeIntoIntervalTypes: Interval type.
+        """
+        return self._interval_type
+    
+    
+    @property
+    def interval_period(self) -> int:
+        """Interval Period
+        
+        Gets interval period.
+
+        Returns:
+            int: Interval period.
+        """
+        return self._interval_period
+    
+    
+    @property
+    def interval_offset(self) -> int:
+        """Interval Offset
+        
+        Gets interval offset.
+
+        Returns:
+            int: Interval offset.
+        """
+        return self._interval_offset
+    
+    
+    @property
+    def next_epoch_time_msec(self) -> int:
+        """Next Epoch Time
+        
+        Gets next epoch time event in milli-seconds.
+
+        Returns:
+            int: Next epoch time event in milli-seconds.
+        """
+        return self._next_epoch_time_msec
