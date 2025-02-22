@@ -155,10 +155,10 @@ class TimeIntoInterval:
         elif interval_type == TimeIntoIntervalTypes.TIME_INTO_INTERVAL_HR:
             next_year  = now_year
             next_month = now_month
-            next_day  = now_day
-            next_h    = 0
-            next_m    = 0
-            next_s    = 0
+            next_day   = now_day
+            next_h     = 0
+            next_m     = 0
+            next_s     = 0
         
         # Handle interval period by time-parts time-span exceedance
         if interval_period_msec > 60 * 1000:
@@ -221,16 +221,15 @@ class TimeIntoInterval:
         return epoch_time_next_event_msec
     
     
-    def epoch_time_last_event_msec(self, interval_type: TimeIntoIntervalTypes, interval_period: int, next_epoch_time_msec: int) -> int:
+    def epoch_time_last_event_msec(self, interval_type: TimeIntoIntervalTypes, interval_period: int) -> int:
         """
         # epoch_time_last_event_msec
         
-        Calculates epoch time of the last event in milli-seconds from interval type and period, and the next epoch time in milli-seconds.
+        Calculates epoch time of the last event in milli-seconds from interval type and period.
 
         Args:
             interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
             interval_period (int): Interval period for interval precision type (seconds, minutes, or hours).
-            next_epoch_time_msec (int): Next epoch time in milli-seconds.
 
         Returns:
             int: Epoch time of the last event in milli-seconds.
@@ -240,7 +239,7 @@ class TimeIntoInterval:
         interval_msec = self.normalize_interval_to_msec(interval_type, interval_period)
         
         # Set last event epoch timestamp
-        return next_epoch_time_msec - interval_msec
+        return self.next_epoch_time_msec - interval_msec
     
     
     def interval_elapsed(self) -> bool:
@@ -258,7 +257,7 @@ class TimeIntoInterval:
         state = False
         
         # Compute time delta until next time into interval condition
-        delta_msec = self._next_epoch_time_msec - self.epoch_time_msec
+        delta_msec = self.next_epoch_time_msec - self.epoch_time_msec
         
         # Validate time delta, when delta is <= 0, time has elapsed
         if delta_msec <= 0:
@@ -266,7 +265,7 @@ class TimeIntoInterval:
             state = True
             
             # Set next event timestamp (UTC)
-            self._next_epoch_time_msec = self.epoch_time_next_event_msec(self._interval_type, self._interval_period, self._interval_offset, self._next_epoch_time_msec)
+            self._next_epoch_time_msec = self.epoch_time_next_event_msec(self.interval_type, self.interval_period, self.interval_offset, self.next_epoch_time_msec)
         
         return state
     
@@ -281,21 +280,21 @@ class TimeIntoInterval:
         
         """
         # Compute time delta until next scan event
-        delta_msec = self._next_epoch_time_msec - self.epoch_time_msec
+        delta_msec = self.next_epoch_time_msec - self.epoch_time_msec
         
         # Validate time is into the future, otherwise, reset next epoch time
         if delta_msec <= 0:
             # Set epoch timestamp of the next scheduled task
-            self._next_epoch_time_msec = self.epoch_time_next_event_msec(self._interval_type, self._interval_period, self._interval_offset, self._next_epoch_time_msec)
+            self._next_epoch_time_msec = self.epoch_time_next_event_msec(self.interval_type, self.interval_period, self.interval_offset, self.next_epoch_time_msec)
             
             # Compute time delta for next event
-            delta_msec = self._next_epoch_time_msec - self.epoch_time_msec
+            delta_msec = self.next_epoch_time_msec - self.epoch_time_msec
         
-        # delay the tacks
+        # delay the tasks
         await self._long_sleep_msec(delta_msec)
         
         # Set epoch timestamp of the next scheduled task
-        self._next_epoch_time_msec = self.epoch_time_next_event_msec(self._interval_type, self._interval_period, self._interval_offset, self._next_epoch_time_msec)
+        self._next_epoch_time_msec = self.epoch_time_next_event_msec(self.interval_type, self.interval_period, self.interval_offset, self.next_epoch_time_msec)
         
         
     @property
