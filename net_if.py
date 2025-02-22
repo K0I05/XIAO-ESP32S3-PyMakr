@@ -18,7 +18,12 @@ wlan = network.WLAN(network.STA_IF)
 
 
 def format_localtime() -> str:
-    """Gets formatted local-time as a string (yyyy-mm-dd HH:MM)"""
+    """
+    # format_locatime
+    
+    Gets formatted local-time as a string (yyyy-mm-dd HH:MM).
+    
+    """
     # Get date-time parts from internal RTC
     (year, month, day, hrs, mins, secs, wday, yday) = timezone.localtime(config.ntp_timezone_info)
     
@@ -27,7 +32,12 @@ def format_localtime() -> str:
 
 
 def format_utctime() -> str:
-    """Gets formatted utc-time as a string (yyyy-mm-dd HH:MM)"""
+    """
+    # format_utctime
+    
+    Gets formatted utc-time as a string (yyyy-mm-dd HH:MM).
+    
+    """
     # Get utc date-time parts
     (year, month, day, hrs, mins, secs, wday, yday) = timezone.gmtime()
     
@@ -36,7 +46,12 @@ def format_utctime() -> str:
     
     
 async def synch_ntp_time() -> None:
-    """Synchronizes system time with NTP time server and initializes RTC to UTC time"""
+    """
+    # synch_ntp_time
+    
+    Synchronizes system time with NTP time server and initializes RTC to UTC time.
+    
+    """
     # validate network connectivity
     if not wlan.isconnected():
         raise RuntimeError('no wifi connection')
@@ -56,7 +71,12 @@ async def synch_ntp_time() -> None:
 
 
 async def connect_wifi() -> None:
-    """Connects system to wifi network"""
+    """
+    # connect_wifi
+    
+    Connects system to wifi network.
+    
+    """
     # Activate wifi
     wlan.active(True)
     
@@ -86,7 +106,11 @@ async def connect_wifi() -> None:
 
 
 async def disconnect_wifi() -> None:
-    """Disconnects system from wifi network"""
+    """
+    # disconnect_wifi
+    
+    Disconnects system from wifi network.
+    """
     # Disconnect from wifi network
     if wlan.isconnected():
         wlan.disconnect()
@@ -104,7 +128,12 @@ async def disconnect_wifi() -> None:
 
 
 def wifi_status() -> str:
-    """Gets wifi network status"""
+    """
+    # wifi_status
+    
+    Gets wifi network status.
+    
+    """
     if wlan.status() == network.STAT_IDLE:
         return "idle"
     elif wlan.status() == network.STAT_CONNECTING:
@@ -120,5 +149,10 @@ def wifi_status() -> str:
 
 
 def is_wifi_connected() -> bool:
-    """Checks if the system is connected to a wifi network"""
+    """
+    # is_wifi_connected
+    
+    Checks if the system is connected to a wifi network.
+    
+    """
     return wlan.isconnected()

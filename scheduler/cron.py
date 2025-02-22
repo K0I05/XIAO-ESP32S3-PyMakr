@@ -35,9 +35,13 @@ class Cron:
       
     # A call to the inner function takes 270-520μs on Pyboard depending on args
     def get_job_event_time(self, *, secs=0, mins=0, hrs=3, mday=None, month=None, wday=None) -> int:
-        """Get job event time
+        """
+        # get_job_event_time
         
-        cron1 = cron.get_job_event_time(hrs=None, mins=range(0, 60, 15))  # Every 15 minutes of every day
+        Gets job time to wait before the event is triggered.
+        
+        Examples:
+            cron1 = cron.get_job_event_time(hrs=None, mins=range(0, 60, 15))  # Every 15 minutes of every day
 
         Args:
             secs (int, optional): Seconds (0..59). Defaults to 0.

@@ -20,53 +20,75 @@ tz = [ [        -8,0,0 ], # Time offset  [      H,M,S] -8, PST
 
 
 class TimeOffset:
-    """Time offset class.
+    """
+    # TimeOffset
     
     This class configures UTC time offset.
+    
     """
     def __init__(self, hour = 0, minute = 0):
-        """Constructor to initialize time-zone offset class parameters.
+        """
+        # __init__
+        
+        Constructor to initialize time-zone offset class parameters.
 
         Args:
             hour (int, optional): Time-zone hour offset from UTC. Defaults to 0.
             minute (int, optional): Time-zone minute offset from UTC. Defaults to 0.
+            
         """
         self._hour   = hour
         self._minute = minute
 
     @property
     def hour(self) -> int:
-        """Gets time hour offset.
+        """
+        # hour
+        
+        Gets time hour offset.
 
         Returns:
             int: Time hour offset.
+            
         """
         return self._hour
 
     @property
     def minute(self) -> int:
-        """Gets time minute offset.
+        """
+        # minute
+        
+        Gets time minute offset.
 
         Returns:
             int: Time minute offset.
+            
         """
         return self._minute
     
     @property
     def offset(self) -> int:
-        """Gets time offset in seconds.
+        """
+        # offset
+        
+        Gets time offset in seconds.
 
         Returns:
             int: Time offset in seconds.
+            
         """
         return (self._minute * 60) + (self._hour * 60 * 60)
     
     @property
     def to_list(self) -> list:
-        """Converts time offset parameters (e.g. hour, minute) to a list.
+        """
+        # to_list
+        
+        Converts time offset parameters (e.g. hour, minute) to a list.
 
         Returns:
             list: Time offset parameters as a list.
+            
         """
         lst = []
         lst.append(self._hour)
@@ -75,53 +97,77 @@ class TimeOffset:
 
 
 class DSTAdjust:
-    """Daylight saving time adjust class.
+    """
+    # DSTAdjust
+    
+    Daylight saving time adjust class.
     
     This class configures the daylight saving time adjustment.
+    
     """
     def __init__(self, hour = 0, minute = 0):
-        """Constructor to initialize daylight saving adjust class parameters.
+        """
+        # __init__
+        
+        Constructor to initialize daylight saving adjust class parameters.
 
         Args:
             hour (int, optional): Daylight saving time hour adjustment. Defaults to 0.
             minute (int, optional): Daylight saving time minute adjustment. Defaults to 0.
+            
         """
         self._hour   = hour
         self._minute = minute
 
     @property
     def hour(self) -> int:
-        """Gets DST adjust hour.
+        """
+        # hour
+        
+        Gets DST adjust hour.
 
         Returns:
             int: DST adjust hour.
+            
         """
         return self._hour
 
     @property
     def minute(self) -> int:
-        """Gets DST adjust minute.
+        """
+        # minute
+        
+        Gets DST adjust minute.
 
         Returns:
             int: DST adjust minute.
+            
         """
         return self._minute
     
     @property
     def adjust(self) -> int:
-        """Gets DST adjust in seconds.
+        """
+        # adjust
+        
+        Gets DST adjust in seconds.
 
         Returns:
             int: DST adjust in seconds.
+            
         """
         return (self._minute * 60) + (self._hour * 60 * 60)
     
     @property
     def to_list(self) -> list:
-        """Converts DST adjust parameters (e.g. hour, minute) to a list.
+        """
+        # to_list
+        
+        Converts DST adjust parameters (e.g. hour, minute) to a list.
 
         Returns:
             list: DST adjust parameters as a list.
+            
         """
         lst = []
         lst.append(self._hour)
@@ -131,18 +177,26 @@ class DSTAdjust:
 
 
 class DSTSchedule:
-    """Daylight saving time schedule class.
+    """
+    # DSTSchedule
+    
+    Daylight saving time schedule class.
     
     This class configures daylight saving time start and end schedules.
+    
     """
     def __init__(self, month = 0, day = 0, hour = 0, minute = 0):
-        """Constructor to initialize daylight saving time schedule class parameters.
+        """
+        # __init__
+        
+        Constructor to initialize daylight saving time schedule class parameters.
 
         Args:
             month (int, optional): Daylight saving time schedule hour. Defaults to 0.
             day (int, optional): Daylight saving time schedule day. Defaults to 0.
             hour (int, optional): Daylight saving time schedule hour. Defaults to 0.
             minute (int, optional): Daylight saving time schedule minute. Defaults to 0.
+            
         """
         self._month  = month
         self._day    = day
@@ -151,46 +205,66 @@ class DSTSchedule:
 
     @property
     def month(self) -> int:
-        """Gets DST schedule month.
+        """
+        # month
+        
+        Gets DST schedule month.
 
         Returns:
             int: DST schedule month.
+            
         """
         return self._month
     
     @property
     def day(self) -> int:
-        """Gets DST schedule day.
+        """
+        # day
+        
+        Gets DST schedule day.
 
         Returns:
             int: DST schedule day.
+            
         """
         return self._day
     
     @property
     def hour(self) -> int:
-        """Gets DST schedule hour.
+        """
+        # hour
+        
+        Gets DST schedule hour.
 
         Returns:
             int: DST schedule hour.
+            
         """
         return self._hour
 
     @property
     def minute(self) -> int:
-        """Gets DST schedule minute.
+        """
+        # minute
+        
+        Gets DST schedule minute.
 
         Returns:
             int: DST schedule minute.
+            
         """
         return self._minute
     
     @property
     def to_list(self) -> list:
-        """Converts DST schedule parameters (e.g. hour, minute) to a list.
+        """
+        # to_list
+        
+        Converts DST schedule parameters (e.g. hour, minute) to a list.
 
         Returns:
             list: DST schedule parameters as a list.
+            
         """
         lst = []
         lst.append(self._month)
@@ -201,18 +275,30 @@ class DSTSchedule:
 
 
 class TimezoneInfo:
-    """Time-zone information class.
+    """
+    # TimezoneInfo
     
     This class configures time-zone offset, DST start, DST end, and DST adjust parameters.
+    
     """
     def __init__(self, timeoffset: TimeOffset, dststart: DSTSchedule, dstend: DSTSchedule, dstadjust: DSTAdjust):
-        """Constructor to initialize time-zone information class parameters.
+        """
+        # __init__
+        
+        Constructor to initialize time-zone information class parameters.
+        
+        Examples:
+            Instantiate timezone information object for ``Atlantic Canada`` with
+            daylight saving start and end schedules, and daylight saving adjustment::
+        
+                tz_info = TimezoneInfo(TimeOffset(-4, 0), DSTSchedule(3, 9, 2, 0), DSTSchedule(11, 2, 2, 0), DSTAdjust(1, 0))
 
         Args:
             timeoffset (TimeOffset): Time-zone offset object.
             dststart (DSTSchedule): Daylight saving time start schedule object.
             dstend (DSTSchedule): Daylight saving time end schedule object.
             dstadjust (DSTAdjust): Daylight saving time adjustment object.
+            
         """
         self._timeoffset = timeoffset
         self._dststart   = dststart
@@ -221,10 +307,14 @@ class TimezoneInfo:
     
     @property
     def timezone(self) -> str:
-        """Gets timezone from offset.
+        """
+        # timezone
+        
+        Gets timezone from offset.
 
         Returns:
             str: Timezone as a formatted string (i.e. GMT+4, GMT-05:30, etc.).
+            
         """
         tz = "GMT"
         if self._timeoffset.hour > 0:
@@ -237,46 +327,66 @@ class TimezoneInfo:
     
     @property
     def timeoffset(self) -> TimeOffset:
-        """Gets time offset object.
+        """
+        # timeoffset
+        
+        Gets time offset object.
 
         Returns:
             TimeOffset: Time offset object.
+            
         """
         return self._timeoffset
     
     @property
     def dststart(self) -> DSTSchedule:
-        """Gets DST start schedule object.
+        """
+        # dststart
+        
+        Gets DST start schedule object.
 
         Returns:
             DSTSchedule: DST start schedule object.
+            
         """
         return self._dststart
     
     @property
     def dstend(self) -> DSTSchedule:
-        """Gets DST end schedule object.
+        """
+        # dstend
+        
+        Gets DST end schedule object.
 
         Returns:
             DSTSchedule: DST end schedule object.
+            
         """
         return self._dstend
     
     @property
     def dstadjust(self) -> DSTAdjust:
-        """Gets DST adjust object.
+        """
+        # dstadjust
+        
+        Gets DST adjust object.
 
         Returns:
             DSTAdjust: DST adjust object.
+            
         """
         return self._dstadjust
     
     @property
     def to_list(self) -> list:
-        """Converts time-zone parameters to a list.
+        """
+        # to_list
+        
+        Converts time-zone parameters to a list.
 
         Returns:
             list: time-zone parameters as a list.
+            
         """
         lst = []
         lst.append(self._timeoffset.to_list)
@@ -290,10 +400,14 @@ class TimezoneInfo:
 
 
 def gmtime() -> tuple:
-    """Gets UTC-time-tuple
+    """
+    # gmtime
+    
+    Gets UTC-time as a tuple.
 
     Returns:
-        tuple: UTC-time-tuple (year, month, day, h, m, s, dow, doy)
+        tuple: UTC-time as a tuple (year, month, day, h, m, s, dow, doy).
+        
     """
     utc = time.gmtime()
     if len(utc) <= 8:
@@ -305,13 +419,17 @@ def gmtime() -> tuple:
 
 
 def is_leap_year(year: int) -> bool:
-    """Checks if a year is a leap year
+    """
+    # is_leap_year
+    
+    Checks if a year is a leap year
 
     Args:
         year (int): Year to check
 
     Returns:
         bool: True when the year is a leap year, otherwise False.
+        
     """
     if (year % 400) == 0 : return True
     if (year % 100) == 0 : return False
@@ -320,7 +438,10 @@ def is_leap_year(year: int) -> bool:
 
 
 def days_in_month(year: int, month: int) -> int:
-    """Gets number of days in a month for a given year
+    """
+    # days_in_month
+    
+    Gets number of days in a month for a given year
 
     Args:
         year (int): Year, for leap year validation
@@ -328,6 +449,7 @@ def days_in_month(year: int, month: int) -> int:
 
     Returns:
         int: Number of days in the month.
+        
     """
     dif = 28 + is_leap_year(year)
     #       Jan Feb  Mar Apr May Jun Jul Aug Sep Oct Nov Dec
@@ -335,17 +457,27 @@ def days_in_month(year: int, month: int) -> int:
 
 
 def localtime(tz: TimezoneInfo) -> tuple:
-    """Gets local-time-tuple from UTC by time-zone
+    """
+    # localtime
+    
+    Gets local-time as a tuple from UTC by time-zone.
+    
+    Examples:
+        Instantiate time-zone information object for ``Atlantic Canada`` with
+        daylight saving start and end schedules, and daylight saving adjustment::
+        
+            tz_info = TimezoneInfo(TimeOffset(-4, 0), DSTSchedule(3, 9, 2, 0), DSTSchedule(11, 2, 2, 0), DSTAdjust(1, 0))
 
     Args:
         tz (TimezoneInfo): Time-zone structure
 
     Returns:
-        tuple: Local-time-tuple (year, month, day, h, m, s, dow, doy)
+        tuple: Local-time as a tuple (year, month, day, h, m, s, dow, doy).
+    
     """
     #   0 1 2  3 4 5  6    7
     # ( Y,M,D, H,M,S, DOW, DOY )
-    year, month, day, h, m, s, dow, doy = gmtime()
+    (year, month, day, h, m, s, dow, doy) = gmtime()
     
     # Use as is when before DST start
     if  month <  tz.dststart.month \

@@ -33,8 +33,14 @@ sht4x_i2c = SHT4X(config.sht4x_addr, i2c0_bus, config.sht4x_config)
 
 
 async def poll_i2c0_devices_task(task_id: str) -> None:
-    """Poll I2C0 Devices
+    """
+    # poll_i2c0_devices_task
+    
     Polls I2C devices on bus 0.
+    
+    Args:
+        task_id (str): Task unique identifier.
+        
     """
     try:
         # Read BMP280 measurements
@@ -56,11 +62,14 @@ async def poll_i2c0_devices_task(task_id: str) -> None:
 
 
 async def do_work_task(task_id: str) -> None:
-    """Do Work Task
+    """
+    # do_work_task
+    
     Dummy task to simulate work.
 
     Args:
         task_id (str): Task unique identifier.
+        
     """
     # Instantiate time-into-interval objects
     tii_1_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 1, 0) # 1-minute interval with no offset

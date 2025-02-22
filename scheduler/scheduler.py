@@ -40,16 +40,36 @@ class Scheduler:  # Enable asynchronous iterator interface
         pass
 
 
-    async def _long_sleep(self, t) -> None:  # Sleep with no bounds. Immediate return if t < 0.
+    async def _long_sleep(self, t: int) -> None:
+        """
+        # _long_sleep
+
+        Sleep with no bounds. Immediate return if t < 0.
+
+        Args:
+            t (int): Sleep duration in seconds.
+            
+        """
         while t > 0:
             await asyncio.sleep(min(t, Scheduler.MAXT))
             t -= Scheduler.MAXT
         
         
-    # If a callback is passed, run it and return.
-    # If a coroutine is passed initiate it and return.
-    # coroutines are passed by name i.e. not using function call syntax.
     def _launch_job(self, func, tup_args) -> any:
+        """
+        # _launch_job
+
+        If a callback is passed, run it and return.  If a coroutine is passed initiate it 
+        and return.  Coroutines are passed by name i.e. not using function call syntax.
+
+        Args:
+            func (_type_): _description_
+            tup_args (_type_): _description_
+
+        Returns:
+            any: _description_
+            
+        """
         res = func(*tup_args)
         if isinstance(res, self._type_coro):
             res = asyncio.create_task(res)
@@ -57,11 +77,13 @@ class Scheduler:  # Enable asynchronous iterator interface
 
     
     async def create_schedule(self, func, *args, times=None, **kwargs) -> any:
-        """Create schedule.
+        """
+        # create_schedule
         
         Creates a schedule to trigger a user defined function at a user defined date-time.
         
-        asyncio.create_task(scheduler.create_schedule(foo, 'every 4 mins', hrs=None, mins=range(0, 60, 4)))
+        Examples:
+            asyncio.create_task(scheduler.create_schedule(foo, 'every 4 mins', hrs=None, mins=range(0, 60, 4)))
 
         Args:
             func (function): This may be a callable (callback or coroutine) to run, a user defined Event or an instance of a Sequence.
@@ -71,6 +93,7 @@ class Scheduler:  # Enable asynchronous iterator interface
 
         Returns:
             any: task or function handle.
+            
         """
         
         tim = mktime(localtime()[:3] + (0, 0, 0, 0, 0))  # Midnight last night
