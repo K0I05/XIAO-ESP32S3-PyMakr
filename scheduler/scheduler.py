@@ -64,7 +64,7 @@ class Scheduler:  # Enable asynchronous iterator interface
 
         Args:
             func (_type_): _description_
-            tup_args (_type_): _description_
+            tup_args (tuple): _description_
 
         Returns:
             any: _description_
@@ -83,7 +83,9 @@ class Scheduler:  # Enable asynchronous iterator interface
         Creates a schedule to trigger a user defined function at a user defined date-time.
         
         Examples:
-            asyncio.create_task(scheduler.create_schedule(foo, 'every 4 mins', hrs=None, mins=range(0, 60, 4)))
+            Create a schedule to invoke the `foo` function every 4 minutes of every day::
+            
+                asyncio.create_task(scheduler.create_schedule(foo, 'every 4 mins', hrs=None, mins=range(0, 60, 4)))
 
         Args:
             func (function): This may be a callable (callback or coroutine) to run, a user defined Event or an instance of a Sequence.
@@ -99,7 +101,7 @@ class Scheduler:  # Enable asynchronous iterator interface
         tim = mktime(localtime()[:3] + (0, 0, 0, 0, 0))  # Midnight last night
         now = round(time())  # round() is for Unix
         cron = Cron() # Instantiate cron object
-        fcron = cron.get_job_event_time(**kwargs)  # Cron instance for search.
+        fcron = cron.job_event_time(**kwargs)  # Cron instance for search.
         while tim < now:  # Find first future trigger in sequence
             # Defensive. fcron should never return 0, but if it did the loop would never quit
             tim += max(fcron(tim), 1)

@@ -23,7 +23,9 @@ class TimeIntoInterval:
     
     def __init__(self, interval_type: TimeIntoIntervalTypes, interval_period: int, interval_offset: int) -> None:
         """
-        # __init__
+        # TimeIntoInterval
+        
+        Constructor to initialize time-zone interval class parameters.
         
         A time-into-interval is used within a MicroPython task subroutine for conditional or task delay 
         based on the configured interval type, period, and offset that is synchronized to the system clock.

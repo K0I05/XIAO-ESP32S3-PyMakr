@@ -28,7 +28,7 @@ class TimeOffset:
     """
     def __init__(self, hour = 0, minute = 0):
         """
-        # __init__
+        # TimeOffset
         
         Constructor to initialize time-zone offset class parameters.
 
@@ -107,7 +107,7 @@ class DSTAdjust:
     """
     def __init__(self, hour = 0, minute = 0):
         """
-        # __init__
+        # DSTAdjust
         
         Constructor to initialize daylight saving adjust class parameters.
 
@@ -187,7 +187,7 @@ class DSTSchedule:
     """
     def __init__(self, month = 0, day = 0, hour = 0, minute = 0):
         """
-        # __init__
+        # DSTSchedule
         
         Constructor to initialize daylight saving time schedule class parameters.
 
@@ -283,7 +283,7 @@ class TimezoneInfo:
     """
     def __init__(self, timeoffset: TimeOffset, dststart: DSTSchedule, dstend: DSTSchedule, dstadjust: DSTAdjust):
         """
-        # __init__
+        # TimezoneInfo
         
         Constructor to initialize time-zone information class parameters.
         
@@ -422,10 +422,10 @@ def is_leap_year(year: int) -> bool:
     """
     # is_leap_year
     
-    Checks if a year is a leap year
+    Checks if a year is a leap year.
 
     Args:
-        year (int): Year to check
+        year (int): Year to check.
 
     Returns:
         bool: True when the year is a leap year, otherwise False.
@@ -441,11 +441,11 @@ def days_in_month(year: int, month: int) -> int:
     """
     # days_in_month
     
-    Gets number of days in a month for a given year
+    Gets number of days in a month for a given year.
 
     Args:
-        year (int): Year, for leap year validation
-        month (int): Month to get days for
+        year (int): Year, for leap year validation.
+        month (int): Month to get days for.
 
     Returns:
         int: Number of days in the month.
@@ -469,7 +469,7 @@ def localtime(tz: TimezoneInfo) -> tuple:
             tz_info = TimezoneInfo(TimeOffset(-4, 0), DSTSchedule(3, 9, 2, 0), DSTSchedule(11, 2, 2, 0), DSTAdjust(1, 0))
 
     Args:
-        tz (TimezoneInfo): Time-zone structure
+        tz (TimezoneInfo): Time-zone information object.
 
     Returns:
         tuple: Local-time as a tuple (year, month, day, h, m, s, dow, doy).

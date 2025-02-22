@@ -65,7 +65,7 @@ async def do_work_task(task_id: str) -> None:
     """
     # do_work_task
     
-    Dummy task to simulate work.
+    A simple task to simulate work.
 
     Args:
         task_id (str): Task unique identifier.
