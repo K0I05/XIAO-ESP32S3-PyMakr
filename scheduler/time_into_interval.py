@@ -160,7 +160,7 @@ class TimeIntoInterval:
             next_m    = 0
             next_s    = 0
         
-        # Handle interval period by time-parts timespan exceedance
+        # Handle interval period by time-parts time-span exceedance
         if interval_period_msec > 60 * 1000:
             # Over 60-seconds, set minute time-part to 0
             next_m = 0
@@ -177,9 +177,6 @@ class TimeIntoInterval:
             next_m   = 0
             next_s   = 0
         
-        # Get system unix epoch time in milli-seconds.
-        now_epoch_time_msec = self.epoch_time_msec
-            
         # Initialize next epoch time event.
         epoch_time_next_event_msec = 0
         
@@ -190,7 +187,7 @@ class TimeIntoInterval:
             epoch_time_next_event_msec = epoch_time_last_event_msec + interval_period_msec
             
             # Compute the delta between now and next unix times.
-            delta_time_msec = epoch_time_next_event_msec - now_epoch_time_msec
+            delta_time_msec = epoch_time_next_event_msec - self.epoch_time_msec
             
             # Ensure next task event is ahead in time, otherwise,
             # recompute the next task event time.
@@ -199,7 +196,7 @@ class TimeIntoInterval:
                 # task event to 0, and regenerate next time event.
                 epoch_time_next_event_msec = 0
         
-        # Validate if the next task event was computed    
+        # Validate if the next task event was computed.    
         if epoch_time_next_event_msec == 0:
             # Convert next time parts to unix epoch time in milli-seconds
             epoch_time_next_event_msec = int(round(time.mktime((next_year, next_month, next_day, next_h, next_m, next_s, next_dow, next_doy)) * 1000))
@@ -208,7 +205,7 @@ class TimeIntoInterval:
             epoch_time_next_event_msec = epoch_time_next_event_msec + interval_period_msec + interval_offset_msec
             
             # Compute the delta between now and next unix times
-            delta_time_msec = epoch_time_next_event_msec - now_epoch_time_msec
+            delta_time_msec = epoch_time_next_event_msec - self.epoch_time_msec
             
             # Ensure next task event is ahead in time
             if delta_time_msec <= 0:
@@ -218,7 +215,7 @@ class TimeIntoInterval:
                     epoch_time_next_event_msec = epoch_time_next_event_msec + interval_period_msec
                     
                     # Compute the delta between now and next unix times
-                    delta_time_msec = epoch_time_next_event_msec - now_epoch_time_msec
+                    delta_time_msec = epoch_time_next_event_msec - self.epoch_time_msec
         
         # Return next task event epoch time
         return epoch_time_next_event_msec
@@ -260,11 +257,8 @@ class TimeIntoInterval:
         """
         state = False
         
-        # Get system unix epoch timestamp (UTC) in milliseconds
-        now_epoch_time_msec = self.epoch_time_msec
-        
         # Compute time delta until next time into interval condition
-        delta_msec = self._next_epoch_time_msec - now_epoch_time_msec
+        delta_msec = self._next_epoch_time_msec - self.epoch_time_msec
         
         # Validate time delta, when delta is <= 0, time has elapsed
         if delta_msec <= 0:
@@ -286,11 +280,8 @@ class TimeIntoInterval:
         type, period, and offset arguments that is synchronized to the system clock.
         
         """
-        # Get system unix epoch times (milli-seconds)
-        now_epoch_time_msec = self.epoch_time_msec
-        
         # Compute time delta until next scan event
-        delta_msec = self._next_epoch_time_msec - now_epoch_time_msec
+        delta_msec = self._next_epoch_time_msec - self.epoch_time_msec
         
         # Validate time is into the future, otherwise, reset next epoch time
         if delta_msec <= 0:
@@ -298,7 +289,7 @@ class TimeIntoInterval:
             self._next_epoch_time_msec = self.epoch_time_next_event_msec(self._interval_type, self._interval_period, self._interval_offset, self._next_epoch_time_msec)
             
             # Compute time delta for next event
-            delta_msec = self._next_epoch_time_msec - now_epoch_time_msec
+            delta_msec = self._next_epoch_time_msec - self.epoch_time_msec
         
         # delay the tacks
         await self._long_sleep_msec(delta_msec)
