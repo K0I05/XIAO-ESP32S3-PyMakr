@@ -10,16 +10,21 @@ from micropython import const
 
 
 class TimeIntoIntervalTypes:
-    """TimeIntoInterval Types
+    """TimeIntoIntervalTypes enum
     """
     TIME_INTO_INTERVAL_SEC = const(0)
+    """Time into interval precision type is seconds."""
     TIME_INTO_INTERVAL_MIN = const(1)
+    """Time into interval precision type is minutes."""
     TIME_INTO_INTERVAL_HR  = const(2)
+    """Time into interval precision type is hours."""
+    
+
 
 
 class TimeIntoInterval:
-    # uasyncio can't handle long delays so split into 100msec segments
     MAXT_MSEC = const(100)
+    """uasyncio can't handle long delays so split into 100msec segments"""
     
     def __init__(self, interval_type: TimeIntoIntervalTypes, interval_period: int, interval_offset: int) -> None:
         """
@@ -39,9 +44,9 @@ class TimeIntoInterval:
         5-minutes at 1-minute into the interval based on the system clock i.e. 12:01:00, 12:06:00, 12:11:00, etc.
  
         Args:
-            interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
-            interval_period (int): Interval period for interval type (seconds, minutes, or hours).
-            interval_offset (int): Interval offset for interval type (seconds, minutes, or hours).
+            interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
+            interval_period (int): Interval period for interval precision type (seconds, minutes, or hours).
+            interval_offset (int): Interval offset for interval precision type (seconds, minutes, or hours).
             
         """
         self._interval_type        = interval_type
@@ -63,8 +68,8 @@ class TimeIntoInterval:
         Calculates normalized interval in milli-seconds from interval type and period.
 
         Args:
-            interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
-            interval_period (int): Interval period per interval type (seconds, minutes, or hours).
+            interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
+            interval_period (int): Interval period per interval precision type (seconds, minutes, or hours).
 
         Returns:
             int: Interval in milli-seconds.
@@ -94,9 +99,9 @@ class TimeIntoInterval:
         with a 1-minute offset, the event will trigger on-time with the system clock i.e. 09:01:00, 09:06:00, 09:11:00, etc.
 
         Args:
-            interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
-            interval_period (int): Interval period for interval type (seconds, minutes, or hours).
-            interval_offset (int): Interval offset for interval type (seconds, minutes, or hours).
+            interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
+            interval_period (int): Interval period for interval precision type (seconds, minutes, or hours).
+            interval_offset (int): Interval offset for interval precision type (seconds, minutes, or hours).
             epoch_time_last_event_msec (int, optional): Epoch time of the last event in milli-seconds. Defaults to 0.
 
 
@@ -214,8 +219,8 @@ class TimeIntoInterval:
         Calculates epoch time of the last event in milli-seconds from interval type and period, and the next epoch time in milli-seconds.
 
         Args:
-            interval_type (TimeIntoIntervalTypes): Interval type (seconds, minutes, hours).
-            interval_period (int): Interval period for interval type (seconds, minutes, or hours).
+            interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
+            interval_period (int): Interval period for interval precision type (seconds, minutes, or hours).
             next_epoch_time_msec (int): Next epoch time in milli-seconds.
 
         Returns:
@@ -309,10 +314,10 @@ class TimeIntoInterval:
         """
         # interval_type
         
-        Gets interval type.
+        Gets interval precision type (seconds, minutes, hours).
 
         Returns:
-            TimeIntoIntervalTypes: Interval type.
+            TimeIntoIntervalTypes: Interval precision type (seconds, minutes, hours).
             
         """
         return self._interval_type
@@ -323,10 +328,10 @@ class TimeIntoInterval:
         """
         # interval_period
         
-        Gets interval period.
+        Gets interval period for interval precision type (seconds, minutes, or hours).
 
         Returns:
-            int: Interval period.
+            int: Interval period for interval precision type (seconds, minutes, or hours).
             
         """
         return self._interval_period
@@ -337,10 +342,10 @@ class TimeIntoInterval:
         """
         # interval_offset
         
-        Gets interval offset.
+        Gets interval offset for interval precision type (seconds, minutes, or hours).
 
         Returns:
-            int: Interval offset.
+            int: Interval offset for interval precision type (seconds, minutes, or hours).
             
         """
         return self._interval_offset
