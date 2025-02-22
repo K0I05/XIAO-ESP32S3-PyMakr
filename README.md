@@ -36,6 +36,8 @@ async def main() -> None:
 ```
 The example interfaces the `Bosch BMP280` and `Sensirion SHT4X` sensors over I2C.  Task scheduling is handled by `asyncio.create_task` and the `scheduler` module.  WiFi connectivity and NTP time synchronization is handled by the `net_if` module, and time-zone is handled by the `timezone` module.  The example's configuration is handled by the `config` module.
 
+The master branch of the code base for the `schedule` module is located here: https://github.com/peterhinch/micropython-async/tree/197c2b5d72cc7633e4b3176eabdeef532ea09ffd/v3/as_drivers/sched.  The readme files are amazing and the `schedule` readme is available here: https://github.com/peterhinch/micropython-async/blob/197c2b5d72cc7633e4b3176eabdeef532ea09ffd/v3/docs/SCHEDULE.md.
+
 ## Time-Zone Support
 The `timezone` module is a lightweight implementation to support time-zone functionality in MicroPython.  The system synchronizes its `RTC` with an NTP host once the system connects to a WiFi network and sets the system time to UTC by default.  The time can be converted to local-time by specifying a time-zone information object as an argument for the `localtime` function.
 ```
