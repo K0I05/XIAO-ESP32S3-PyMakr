@@ -28,14 +28,6 @@ ntp_timeout_ms    = 5 * 1000
 ntp_timezone_info = TimezoneInfo(TimeOffset(-4, 0), DSTSchedule(3, 9, 2, 0), DSTSchedule(11, 2, 2, 0), DSTAdjust(1, 0))
 
 
-## WS2812 RGB LED ##
-# Initialize WS2812 configuration settings
-ws2812b_enabled = False     # WS2812 is enabled when true
-ws2812b_num     = 1         # number of WS2812 RGB LEDs
-ws2812b_io      = 16        # WS2812 RGB LED GPIO number
-ws2812b_itr_ms  = 10 * 1000 # WS2812 timer interrupt interval in milliseconds
-
-
 ## I2C Bus 0 ##
 # Initialize I2C bus 0 configuration settings
 i2c0_bus_id  = 0            # I2C0 bus number
