@@ -33,7 +33,7 @@ async def main() -> None:
             print('Keyboard Interrupt')
             break
 ```
-The example interfaces the `Bosch BMP280` and `Sensirion SHT4X` sensors over I2C.  Task scheduling is handled by `asyncio.create_task` and the `scheduler` module.  WiFi connectivity and NTP time synchronization is handled by the `net_if` module, and time-zone is handled by the `timezone` module.  The example's configuration is handled by the `config` module.
+The example interfaces the `Bosch BMP280` and `Sensirion SHT4X` sensors over I2C.  The I2C drivers for the `Bosch BMP280` and `Sensirion SHT4X` sensors are random drivers that found online and seem to work fine for the purposes of this example.  Task scheduling is handled by `asyncio.create_task` function and the `scheduler` module.  WiFi connectivity and NTP time synchronization are handled by the `net_if` module, and time-zone is handled by the `timezone` module.  The example's configuration is handled by the `config` module.
 
 The master branch of the code base for the `schedule` module is located here: https://github.com/peterhinch/micropython-async/tree/197c2b5d72cc7633e4b3176eabdeef532ea09ffd/v3/as_drivers/sched.  The readme files are amazing and the `schedule` readme is available here: https://github.com/peterhinch/micropython-async/blob/197c2b5d72cc7633e4b3176eabdeef532ea09ffd/v3/docs/SCHEDULE.md.
 

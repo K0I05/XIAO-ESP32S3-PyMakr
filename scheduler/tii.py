@@ -10,7 +10,7 @@ from micropython import const
 
 
 class TimeIntoIntervalTypes:
-    """Time into interval types
+    """TimeIntoInterval Types
     """
     TIME_INTO_INTERVAL_SEC = const(0)
     TIME_INTO_INTERVAL_MIN = const(1)
