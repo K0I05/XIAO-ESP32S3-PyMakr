@@ -34,7 +34,7 @@ class TimeIntoInterval:
     MAXT_MSEC = const(100)
     """asyncio can't handle long delays so split into 100msec segments"""
     
-    def __init__(self, interval_type: TimeIntoIntervalTypes, interval_period: int, interval_offset: int) -> None:
+    def __init__(self, interval_type: TimeIntoIntervalTypes, interval_period: int, interval_offset: int = 0) -> None:
         """
         # TimeIntoInterval
         
@@ -54,7 +54,7 @@ class TimeIntoInterval:
         Args:
             interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
             interval_period (int): Interval period for interval precision type (seconds, minutes, or hours).
-            interval_offset (int): Interval offset for interval precision type (seconds, minutes, or hours).
+            interval_offset (int, optional): Interval offset for interval precision type (seconds, minutes, or hours). Defaults to 0.
         
         Raises:
             ValueError: If `interval_period` is less than or equal to 0, is greater than 28-days, or is less than the `interval_offset`.
@@ -102,7 +102,7 @@ class TimeIntoInterval:
         """
         # normalize_interval_msec
         
-        Normalizes interval to milliseconds from interval type and period.
+        Normalizes interval to milliseconds from interval type and period or offset.
 
         Args:
             interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
@@ -112,13 +112,9 @@ class TimeIntoInterval:
             int: Interval in milliseconds.
         
         Raises:
-            ValueError: If `interval_period` is less than or equal to 0 or is greater than 28-days.
+            ValueError: If `interval_period` is greater than 28-days.
             
         """
-        # Validate interval period argument
-        if not interval_period > 0:
-            raise ValueError("Interval period cannot be less than or equal to 0")
-        
         # Normalize interval period to milliseconds
         interval_msec = 0
         if(interval_type == TimeIntoIntervalTypes.TIME_INTO_INTERVAL_SEC):

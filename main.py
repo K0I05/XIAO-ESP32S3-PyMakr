@@ -72,8 +72,8 @@ async def do_work_task(task_id: str) -> None:
         
     """
     # Instantiate time-into-interval objects
-    tii_1_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 1, 0) # 1-minute interval with no offset
-    tii_5_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5, 0) # 5-minute interval with no offset
+    tii_1_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 1) # 1-minute interval with no offset
+    tii_5_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5) # 5-minute interval with no offset
     tii_5_1min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5, 1) # 5-minute interval with 1-minute offset
     
     # Loop forever
