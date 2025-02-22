@@ -55,8 +55,28 @@ class TimeIntoInterval:
             interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
             interval_period (int): Interval period for interval precision type (seconds, minutes, or hours).
             interval_offset (int): Interval offset for interval precision type (seconds, minutes, or hours).
+        
+        Raises:
+            ValueError: If `interval_period` is less than or equal to 0, is greater than 28-days, or is less than the `interval_offset`.
             
         """
+        # Validate interval period argument
+        if not interval_period > 0:
+            raise ValueError("Interval period cannot be less than or equal to 0")
+        
+        # Normalize interval period and offset to milliseconds
+        interval_period_msec = self.normalize_interval_msec(interval_type, interval_period)
+        interval_offset_msec = self.normalize_interval_msec(interval_type, interval_offset)
+        
+        # Validate interval period argument on total days
+        if interval_period_msec >= (28 * 24 * 60 * 60 * 1000):
+            raise ValueError("Interval period cannot be greater than 28-days")
+        
+        # Validate period and offset intervals
+        if (interval_period_msec - interval_offset_msec) < 0:
+            raise ValueError("Interval period must be larger than the interval offset")
+        
+        # Initialize private variables
         self._interval_type        = interval_type
         self._interval_period      = interval_period
         self._interval_offset      = interval_offset
@@ -90,8 +110,16 @@ class TimeIntoInterval:
 
         Returns:
             int: Interval in milliseconds.
+        
+        Raises:
+            ValueError: If `interval_period` is less than or equal to 0 or is greater than 28-days.
             
         """
+        # Validate interval period argument
+        if not interval_period > 0:
+            raise ValueError("Interval period cannot be less than or equal to 0")
+        
+        # Normalize interval period to milliseconds
         interval_msec = 0
         if(interval_type == TimeIntoIntervalTypes.TIME_INTO_INTERVAL_SEC):
             interval_msec = interval_period * 1000
@@ -99,6 +127,11 @@ class TimeIntoInterval:
             interval_msec = interval_period * 60 * 1000
         elif(interval_type == TimeIntoIntervalTypes.TIME_INTO_INTERVAL_HR):
             interval_msec = interval_period * 60 * 60 * 1000
+        
+        # Validate interval period argument on total days
+        if interval_msec >= (28 * 24 * 60 * 60 * 1000):
+            raise ValueError("Interval period cannot be greater than 28-days")
+        
         return interval_msec
     
     
@@ -121,14 +154,16 @@ class TimeIntoInterval:
             interval_offset (int): Interval offset for interval precision type (seconds, minutes, or hours).
             epoch_time_last_event_msec (int, optional): Epoch time of the last event in milliseconds. Defaults to 0.
 
-
         Returns:
             int: Epoch time of the next event in milliseconds.
+        
+        Raises:
+            ValueError: If `interval_period` is less than or equal to 0, is greater than 28-days, or is less than the `interval_offset`.
             
         """
         # Validate interval period argument
         if not interval_period > 0:
-            raise ValueError("Interval period cannot be 0, time-into-interval epoch time event failed")
+            raise ValueError("Interval period cannot be less than or equal to 0")
         
         # Normalize interval period and offset to milliseconds
         interval_period_msec = self.normalize_interval_msec(interval_type, interval_period)
@@ -136,11 +171,11 @@ class TimeIntoInterval:
         
         # Validate interval period argument on total days
         if interval_period_msec >= (28 * 24 * 60 * 60 * 1000):
-            raise ValueError("Interval period cannot be greater than 28-days, time-into-interval epoch time event failed")
+            raise ValueError("Interval period cannot be greater than 28-days")
         
         # Validate period and offset intervals
         if (interval_period_msec - interval_offset_msec) < 0:
-            raise ValueError("Interval period must be larger than the interval offset, time-into-interval epoch time event failed")
+            raise ValueError("Interval period must be larger than the interval offset")
 
         # Get now system unix epoch time parts
         (now_year, now_month, now_day, now_h, now_m, now_s, now_dow, now_doy) = time.gmtime()
@@ -251,10 +286,24 @@ class TimeIntoInterval:
 
         Returns:
             int: Epoch time of the last event in milliseconds.
+        
+        Raises:
+            ValueError: If `interval_period` is less than or equal to 0 or is greater than 28-days.
             
         """
+        # Validate interval period argument
+        if not interval_period > 0:
+            raise ValueError("Interval period cannot be less than or equal to 0")
+        
+        # Normalize interval period to milliseconds
+        interval_period_msec = self.normalize_interval_msec(interval_type, interval_period)
+        
+        # Validate interval period argument on total days
+        if interval_period_msec >= (28 * 24 * 60 * 60 * 1000):
+            raise ValueError("Interval period cannot be greater than 28-days")
+        
         # Convert interval into msec
-        interval_msec = self.normalize_interval_to_msec(interval_type, interval_period)
+        interval_msec = self.normalize_interval_msec(interval_type, interval_period)
         
         # Set last event epoch timestamp
         return self.next_epoch_time_msec - interval_msec
