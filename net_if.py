@@ -6,7 +6,6 @@ Synchronizing system time with NTP server
 # Released under the MIT License (MIT) - see LICENSE file
 
 import asyncio, config, network, ntptime, timezone
-
 from machine import reset, RTC
 
 

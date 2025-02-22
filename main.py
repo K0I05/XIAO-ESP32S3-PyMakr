@@ -11,11 +11,16 @@ XIAO-ESP32S3_I2C_20250216
 import asyncio, config
 
 from machine import Pin, I2C
+from scheduler import TimeIntoInterval, TimeIntoIntervalTypes
 from scheduler import Scheduler #https://github.com/peterhinch/micropython-async/blob/master/v3/docs/SCHEDULE.md
 from bmp280 import BMP280I2C # https://github.com/flrrth/pico-bmp280
 from sht4x import SHT4X # https://github.com/jposada202020/MicroPython_SHT4X
 from net_if import connect_wifi, disconnect_wifi, synch_ntp_time, format_localtime
 
+
+# Instantiate time-into-interval objects
+tii_1min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 1, 0)
+tii_5min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5, 0)
 
 # Instantiate scheduler object
 scheduler = Scheduler()
@@ -52,6 +57,26 @@ async def poll_i2c0_devices(txt) -> None:
         print('OS Error: ', e.args[0])
 
 
+async def do_work(txt) -> None:
+    while True:
+        try:
+            if tii_5min.interval_elapsed():
+                print(f"tii_5min.interval_elapsed: {format_localtime()}")
+            
+            #print("going to sleep for 1-min")
+            #await tii_1min.delay()
+            await asyncio.sleep(0)
+        except RuntimeError as error:
+            print('Runtime Error: ', error.args[0])
+            break
+        except OSError as e:
+            print('OS Error: ', e.args[0])
+            break
+        except KeyboardInterrupt:
+            print('Keyboard Interrupt')
+            break
+    
+    
 async def main() -> None:
     """Main subroutine"""
     # Connect system to wifi network
@@ -64,6 +89,7 @@ async def main() -> None:
     await disconnect_wifi()
 
     # Create scheduled tasks
+    asyncio.create_task(do_work(""))
     asyncio.create_task(scheduler.create_schedule(poll_i2c0_devices, "", hrs=None, mins=range(0, 60, 1)))  # poll i2c device(s) every minute
     
     while True:
