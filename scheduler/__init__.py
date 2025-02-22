@@ -6,8 +6,8 @@
 
 from scheduler.cron import Cron
 from scheduler.scheduler import Scheduler
-from scheduler.tii import TimeIntoInterval
-from scheduler.tii import TimeIntoIntervalTypes
+from scheduler.time_into_interval import TimeIntoInterval
+from scheduler.time_into_interval import TimeIntoIntervalTypes
 
 
 import asyncio

@@ -48,7 +48,7 @@ tz_info = TimezoneInfo(TimeOffset(-4, 0), DSTSchedule(3, 9, 2, 0), DSTSchedule(1
 ```
 
 ## Time-Into-Interval Scheduler
-The `tii` module is a lightweight implementation to support time-into-interval scheduling in MicroPython.  The time-into-interval module synchronizes a MicroPython task with the system clock with user-defined time interval for temporal conditional scenarios.  The shortest interval supported is 1-second and the longest interval supported is 28-days.
+The `time_into_interval` module is a lightweight implementation to support time-into-interval scheduling in MicroPython.  The time-into-interval module synchronizes a MicroPython task with the system clock with user-defined time interval for temporal conditional scenarios.  The shortest interval supported is 1-second and the longest interval supported is 28-days.
 ```
 import asyncio
 
