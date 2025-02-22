@@ -31,7 +31,7 @@ ntp_timezone_info = TimezoneInfo(TimeOffset(-4, 0), DSTSchedule(3, 9, 2, 0), DST
 ## I2C Bus 0 ##
 # Initialize I2C bus 0 configuration settings
 i2c0_bus_id  = 0            # I2C0 bus number
-i2c0_freq_hz = 100000       # I2C0 clock frequency in hertz
+i2c0_freq_hz = 100 * 1000   # I2C0 clock frequency in hertz (100khz)
 i2c0_sda_io  = 5            # I2C0 SDA GPIO number
 i2c0_scl_io  = 6            # I2C0 SCL GPIO number
 i2c0_smp_ms  = 10 * 1000    # I2C0 sampling interval in milliseconds
