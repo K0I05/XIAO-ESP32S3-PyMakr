@@ -18,10 +18,6 @@ from sht4x import SHT4X # https://github.com/jposada202020/MicroPython_SHT4X
 from net_if import connect_wifi, disconnect_wifi, synch_ntp_time, format_localtime
 
 
-# Instantiate time-into-interval objects
-tii_1min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 1, 0)
-tii_5min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5, 0)
-
 # Instantiate scheduler object
 scheduler = Scheduler()
 
@@ -36,7 +32,7 @@ sht4x_i2c = SHT4X(config.sht4x_addr, i2c0_bus, config.sht4x_config)
 
 
 
-async def poll_i2c0_devices(txt) -> None:
+async def poll_i2c0_devices_task(task_id: str) -> None:
     """Poll I2C0 Devices
     Polls I2C devices on bus 0.
     """
@@ -48,32 +44,51 @@ async def poll_i2c0_devices(txt) -> None:
         temperature, relative_humidity = sht4x_i2c.measurements
         
         # Print results
-        print(f"{format_localtime()} Temperature: {temperature:.2f} C | Humidity: {relative_humidity:.2f} % | Pressure: {readout['p']:.2f} hPa.")
+        print(f"{task_id}: {format_localtime()} Temperature: {temperature:.2f} C | Humidity: {relative_humidity:.2f} % | Pressure: {readout['p']:.2f} hPa.")
         
         await asyncio.sleep(0)
     except RuntimeError as error:
-        print('Runtime Error: ', error.args[0])
+        print(f'{task_id}: Runtime Error: ', error.args[0])
     except OSError as e:
-        print('OS Error: ', e.args[0])
+        print(f'{task_id}: OS Error: ', e.args[0])
+    except KeyboardInterrupt:
+        print(f'{task_id}: Keyboard Interrupt')
 
 
-async def do_work(txt) -> None:
+async def do_work_task(task_id: str) -> None:
+    """Do Work Task
+    Dummy task to simulate work.
+
+    Args:
+        task_id (str): Task unique identifier.
+    """
+    # Instantiate time-into-interval objects
+    tii_1_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 1, 0) # 1-minute interval with no offset
+    tii_5_0min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5, 0) # 5-minute interval with no offset
+    tii_5_1min = TimeIntoInterval(TimeIntoIntervalTypes.TIME_INTO_INTERVAL_MIN, 5, 1) # 5-minute interval with 1-minute offset
+    
+    # Loop forever
     while True:
         try:
-            if tii_5min.interval_elapsed():
-                print(f"tii_5min.interval_elapsed: {format_localtime()}")
+            # interval will elapse every 5-minutes (12:00:00, 12:05:00, 12:10:00, etc)
+            if tii_5_0min.interval_elapsed():
+                print(f"{task_id}: tii_5_0min.interval_elapsed: {format_localtime()}")
+                
+            # interval will elapse every 5-minutes with a 1-minute offset (12:01:00, 12:06:00, 12:11:00, etc) 
+            if tii_5_1min.interval_elapsed():
+                print(f"{task_id}: tii_5_1min.interval_elapsed: {format_localtime()}")
             
-            #print("going to sleep for 1-min")
-            #await tii_1min.delay()
-            await asyncio.sleep(0)
+            # interval will sleep for 1-minute (12:00:00, 12:01:00, 12:02:00, etc)
+            print(f"{task_id}: tii_1_0min.interval_sleep: {format_localtime()}")
+            await tii_1_0min.interval_sleep()
         except RuntimeError as error:
-            print('Runtime Error: ', error.args[0])
+            print(f'{task_id}: Runtime Error: ', error.args[0])
             break
         except OSError as e:
-            print('OS Error: ', e.args[0])
+            print(f'{task_id}: OS Error: ', e.args[0])
             break
         except KeyboardInterrupt:
-            print('Keyboard Interrupt')
+            print(f'{task_id}: Keyboard Interrupt')
             break
     
     
@@ -89,9 +104,10 @@ async def main() -> None:
     await disconnect_wifi()
 
     # Create scheduled tasks
-    asyncio.create_task(do_work(""))
-    asyncio.create_task(scheduler.create_schedule(poll_i2c0_devices, "", hrs=None, mins=range(0, 60, 1)))  # poll i2c device(s) every minute
+    asyncio.create_task(do_work_task("tsk0"))
+    asyncio.create_task(scheduler.create_schedule(poll_i2c0_devices_task, "tsk1", hrs=None, mins=range(0, 60, 1)))  # poll i2c device(s) every minute
     
+    # Loop forever
     while True:
         try:
             await asyncio.sleep(1)

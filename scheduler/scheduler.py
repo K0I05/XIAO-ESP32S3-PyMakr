@@ -57,7 +57,8 @@ class Scheduler:  # Enable asynchronous iterator interface
 
     
     async def create_schedule(self, func, *args, times=None, **kwargs) -> any:
-        """Create schedule
+        """Create schedule.
+        
         Creates a schedule to trigger a user defined function at a user defined date-time.
         
         asyncio.create_task(scheduler.create_schedule(foo, 'every 4 mins', hrs=None, mins=range(0, 60, 4)))

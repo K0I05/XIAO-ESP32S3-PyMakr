@@ -21,6 +21,7 @@ tz = [ [        -8,0,0 ], # Time offset  [      H,M,S] -8, PST
 
 class TimeOffset:
     """Time offset class.
+    
     This class configures UTC time offset.
     """
     def __init__(self, hour = 0, minute = 0):
@@ -75,6 +76,7 @@ class TimeOffset:
 
 class DSTAdjust:
     """Daylight saving time adjust class.
+    
     This class configures the daylight saving time adjustment.
     """
     def __init__(self, hour = 0, minute = 0):
@@ -130,6 +132,7 @@ class DSTAdjust:
 
 class DSTSchedule:
     """Daylight saving time schedule class.
+    
     This class configures daylight saving time start and end schedules.
     """
     def __init__(self, month = 0, day = 0, hour = 0, minute = 0):
@@ -199,6 +202,7 @@ class DSTSchedule:
 
 class TimezoneInfo:
     """Time-zone information class.
+    
     This class configures time-zone offset, DST start, DST end, and DST adjust parameters.
     """
     def __init__(self, timeoffset: TimeOffset, dststart: DSTSchedule, dstend: DSTSchedule, dstadjust: DSTAdjust):
