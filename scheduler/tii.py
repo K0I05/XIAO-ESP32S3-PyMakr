@@ -1,3 +1,6 @@
+# Copyright (c) 2024 Eric Gionet (gionet.c.eric@gmail.com)
+# Released under the MIT License (MIT) - see LICENSE file
+
 import asyncio, time
 
 from micropython import const
