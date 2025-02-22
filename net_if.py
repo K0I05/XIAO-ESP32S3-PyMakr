@@ -7,9 +7,7 @@ Synchronizing system time with NTP server
 
 import asyncio, config, network, ntptime, timezone
 
-from neopixel import NeoPixel
 from machine import reset, RTC
-from timezone import TimeOffset, DSTAdjust, DSTSchedule, TimezoneInfo
 
 
 # Instantiate RTC object
@@ -49,7 +47,7 @@ async def synch_ntp_time() -> None:
     ntptime.host    = config.ntp_host
     ntptime.timeout = config.ntp_timeout_ms
     
-    # Get UTC time from NTP host (this function sets the system RTC to UTC)
+    # Get UTC time from NTP host (this function will set the system RTC to UTC)
     ntptime.settime()
     
     # Print local and utc timestamps

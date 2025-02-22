@@ -1,9 +1,9 @@
 # XIAO ESP32-S3 MicroPython + Visual Studio Code with PyMkr Extension
 A `XIAO ESP32-S3` MicroPython example showcasing I2C sensor interfacing, WiFi connectivity, NTP and RTC time synchronization with time-zone support, and task scheduling.  The development environment leverages `Visual Studio Code` with `PyMakr` extension and the `Code Completion` extension for MicroPython is recommended.  The example's execution flow is as follows:
-1. Connect system to WiFi network
-2. Synchronize system RTC with NTP host
-3. Disconnect system from WiFi network
-4. Poll devices on I2C bus 0 once a minute
+1. Connects system to WiFi network
+2. Synchronizes system RTC with NTP host
+3. Disconnects system from WiFi network
+4. Poll's devices on I2C bus 0 once a minute
 
 ```
 async def main() -> None:
