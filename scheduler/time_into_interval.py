@@ -177,17 +177,30 @@ class TimeIntoInterval:
             next_m   = 0
             next_s   = 0
         
-        # Initialize next epoch time event
+        # Get system unix epoch time in milli-seconds.
+        now_epoch_time_msec = self.epoch_time_msec
+            
+        # Initialize next epoch time event.
         epoch_time_next_event_msec = 0
         
-        # Validate if the next task event was computed
-        if epoch_time_last_event_msec != 0:
-            # Add task interval to next task event epoch to compute next task event epoch
+        # Validate if the last task event was computed.
+        if epoch_time_last_event_msec > 0:
+            # Add task interval to last task event epoch to 
+            # compute next task event epoch.
             epoch_time_next_event_msec = epoch_time_last_event_msec + interval_period_msec
-        else:
-            # Get system unix epoch times (seconds and milli-seconds)
-            now_epoch_time_msec = self.epoch_time_msec
             
+            # Compute the delta between now and next unix times.
+            delta_time_msec = epoch_time_next_event_msec - now_epoch_time_msec
+            
+            # Ensure next task event is ahead in time, otherwise,
+            # recompute the next task event time.
+            if delta_time_msec < 0:
+                # Next task event is not ahead in time, set next 
+                # task event to 0, and regenerate next time event.
+                epoch_time_next_event_msec = 0
+        
+        # Validate if the next task event was computed    
+        if epoch_time_next_event_msec == 0:
             # Convert next time parts to unix epoch time in milli-seconds
             epoch_time_next_event_msec = int(round(time.mktime((next_year, next_month, next_day, next_h, next_m, next_s, next_dow, next_doy)) * 1000))
             
