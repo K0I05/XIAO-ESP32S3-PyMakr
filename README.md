@@ -38,7 +38,7 @@ The example interfaces the `Bosch BMP280` and `Sensirion SHT4X` sensors over I2C
 
 
 ## Repository
-This example is hosted on github and is located here:
+This example is hosted on github and is located here: https://github.com/K0I05/XIAO-ESP32S3-PyMakr
 
 
 

@@ -13,7 +13,6 @@ from scheduler.sequence import Sequence
 from micropython import const
 
 
-
 class Scheduler:  # Enable asynchronous iterator interface
     # uasyncio can't handle long delays so split into 1000s (1e6 ms) segments
     MAXT = const(1000)

@@ -11,7 +11,7 @@ XIAO-ESP32S3_I2C_20250216
 import asyncio, config
 
 from machine import Pin, I2C
-from scheduler import Scheduler
+from scheduler import Scheduler #https://github.com/peterhinch/micropython-async/blob/master/v3/docs/SCHEDULE.md
 from bmp280 import BMP280I2C # https://github.com/flrrth/pico-bmp280
 from sht4x import SHT4X # https://github.com/jposada202020/MicroPython_SHT4X
 from net_if import connect_wifi, disconnect_wifi, synch_ntp_time, format_localtime
