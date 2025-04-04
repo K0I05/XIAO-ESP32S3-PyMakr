@@ -8,7 +8,8 @@ if you are just testing your scripts.
 # Released under the MIT License (MIT) - see LICENSE file
 
 from bmp280 import BMP280Configuration # https://github.com/flrrth/pico-bmp280
-from sht4x import SHT4XConfiguration 
+from sht4x import SHT4XConfiguration
+from ltr390 import LTR390Configuration
 from timezone import TimeOffset, DSTAdjust, DSTSchedule, TimezoneInfo
 
 
@@ -61,4 +62,13 @@ sht4x_config.heater_power          = SHT4XConfiguration.HEATER_POWER_20MW
 sht4x_config.heater_timespan       = SHT4XConfiguration.HEATER_TIMESPAN_1SEC
 
 
+## LTR390 Sensor ##
+# Initialize LTR390 I2C configuration settings
+ltr390_addr = 0x53   # LTR390 I2C address
 
+# Instantiate LTR390 configuration object & initialize parameters
+ltr390_config = LTR390Configuration()
+ltr390_config.resolution  = LTR390Configuration.MEASUREMENT_RESOLUTION_18BIT
+ltr390_config.gain        = LTR390Configuration.MEASUREMENT_GAIN_X3
+ltr390_config.rate        = LTR390Configuration.MEASUREMENT_RATE_100MS
+ltr390_config.mode        = LTR390Configuration.MEASUREMENT_MODE_ALS

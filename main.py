@@ -8,6 +8,7 @@ XIAO-ESP32S3_I2C_20250216
 # Copyright (c) 2024 Eric Gionet (gionet.c.eric@gmail.com)
 # Released under the MIT License (MIT) - see LICENSE file
 
+
 import asyncio, config
 
 from machine import Pin, I2C
@@ -15,24 +16,12 @@ from scheduler import TimeIntoInterval, TimeIntoIntervalTypes
 from scheduler import Scheduler #https://github.com/peterhinch/micropython-async/blob/master/v3/docs/SCHEDULE.md
 from bmp280 import BMP280I2C # https://github.com/flrrth/pico-bmp280
 from sht4x import SHT4X # https://github.com/jposada202020/MicroPython_SHT4X
+from ltr390 import LTR390 # https://github.com/TJC/dfrobot-LTR390-UV-sensor-micropython/blob/main/ltr390.py
 from net_if import connect_wifi, disconnect_wifi, synch_ntp_time, format_localtime
 
 
-# Instantiate scheduler object
-scheduler = Scheduler()
 
-# Instantiate I2C bus object
-i2c0_bus = I2C(config.i2c0_bus_id, sda=Pin(config.i2c0_sda_io), scl=Pin(config.i2c0_scl_io), freq=config.i2c0_freq_hz)
-
-# Instantiate BMP280 I2C object
-bmp280_i2c = BMP280I2C(config.bmp280_addr, i2c0_bus, config.bmp280_config)
-
-# Instantiate SHT4X I2C object
-sht4x_i2c = SHT4X(config.sht4x_addr, i2c0_bus, config.sht4x_config)
-
-
-
-async def poll_i2c0_devices_task(task_id: str) -> None:
+async def poll_i2c0_devices_task(task_id: str, i2c: I2C) -> None:
     """
     # poll_i2c0_devices_task
     
@@ -42,6 +31,16 @@ async def poll_i2c0_devices_task(task_id: str) -> None:
         task_id (str): Task unique identifier.
         
     """
+    # Instantiate BMP280 I2C object
+    bmp280_i2c = BMP280I2C(config.bmp280_addr, i2c, config.bmp280_config)
+
+    # Instantiate SHT4X I2C object
+    sht4x_i2c = SHT4X(config.sht4x_addr, i2c, config.sht4x_config)
+    
+    # Instantiate LTR390 I2C object
+    #ltr390_i2c = LTR390(config.ltr390_addr, i2c, config.ltr390_config)
+    
+    # Sample I2C sensors
     try:
         # Read BMP280 measurements
         readout = bmp280_i2c.measurements
@@ -49,8 +48,17 @@ async def poll_i2c0_devices_task(task_id: str) -> None:
         # Read SHT4X measurements
         temperature, relative_humidity = sht4x_i2c.measurements
         
+        # Read LTR390 UV measurement
+        #uvs = ltr390_i2c.uvs
+        
+        # Read LTR390 ambient light measurement
+        #ltr390_i2c.enable_als_mode()
+        #ambient_light = ltr390_i2c.als
+        
         # Print results
-        print(f"{task_id}: {format_localtime()} Temperature: {temperature:.2f} C | Humidity: {relative_humidity:.2f} % | Pressure: {readout['p']:.2f} hPa.")
+        #print(f"{task_id}: {format_localtime()} Temperature: {temperature:.2f} C | Humidity: {relative_humidity:.2f} % | Pressure: {readout['p']:.2f} hPa | Ambient Light: {ambient_light:.2f}")
+        #print(f"{task_id}: {format_localtime()} Temperature: {temperature:.2f} C | Humidity: {relative_humidity:.2f} % | Pressure: {readout['p']:.2f} hPa | UV: {uvs:.2f}")
+        print(f"{task_id}: {format_localtime()} Temperature: {temperature:.2f} C | Humidity: {relative_humidity:.2f} % | Pressure: {readout['p']:.2f} hPa")
         
         await asyncio.sleep(0)
     except RuntimeError as error:
@@ -102,6 +110,12 @@ async def do_work_task(task_id: str) -> None:
     
     
 async def main() -> None:
+    # Instantiate scheduler object
+    scheduler = Scheduler()
+
+    # Instantiate I2C bus object
+    i2c0_bus = I2C(config.i2c0_bus_id, sda=Pin(config.i2c0_sda_io), scl=Pin(config.i2c0_scl_io), freq=config.i2c0_freq_hz)
+
     """Main subroutine"""
     # Connect system to wifi network
     await connect_wifi()
@@ -114,7 +128,7 @@ async def main() -> None:
 
     # Create scheduled tasks
     asyncio.create_task(do_work_task("tsk0"))
-    asyncio.create_task(scheduler.create_schedule(poll_i2c0_devices_task, "tsk1", hrs=None, mins=range(0, 60, 1)))  # poll i2c device(s) every minute
+    asyncio.create_task(scheduler.create_schedule(poll_i2c0_devices_task, "tsk1", i2c0_bus, hrs=None, mins=range(0, 60, 1)))  # poll i2c device(s) every minute
     
     # Loop forever
     while True:

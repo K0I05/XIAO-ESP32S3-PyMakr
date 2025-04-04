@@ -106,7 +106,7 @@ class TimeIntoInterval:
 
         Args:
             interval_type (TimeIntoIntervalTypes): Interval precision type (seconds, minutes, hours).
-            interval_period (int): Interval period per interval precision type (seconds, minutes, or hours).
+            interval_period (int): Interval period or offset for interval precision type (seconds, minutes, or hours).
 
         Returns:
             int: Interval in milliseconds.

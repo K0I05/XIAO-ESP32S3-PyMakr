@@ -84,7 +84,7 @@ async def connect_wifi() -> None:
     wlan.connect(config.wifi_ssid, config.wifi_pwd)
     
     # Wait for connect or fail
-    print('waiting for wifi connection ...')
+    print(f'waiting for {config.wifi_ssid} wifi connection ...')
     max_wait = 30
     while max_wait > 0:
         if wlan.isconnected() == True:
